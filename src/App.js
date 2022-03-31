@@ -6,6 +6,23 @@ import * as Cam from '@mediapipe/camera_utils'
 import Webcam from 'react-webcam'
 import {useRef, useEffect } from 'react'
 
+function faceDraw(results, canvasCtx, drawConnectors) {
+  if (results.multiFaceLandmarks) {
+    for (const landmarks of results.multiFaceLandmarks) {
+      drawConnectors(canvasCtx, landmarks, Facemesh.FACEMESH_TESSELATION,
+                      {color: '#C0C0C070', lineWidth: 1});
+      drawConnectors(canvasCtx, landmarks, Facemesh.FACEMESH_RIGHT_EYE, {color: '#FF3030'});
+      drawConnectors(canvasCtx, landmarks, Facemesh.FACEMESH_RIGHT_EYEBROW, {color: '#FF3030'});
+      drawConnectors(canvasCtx, landmarks, Facemesh.FACEMESH_RIGHT_IRIS, {color: '#FF3030'});
+      drawConnectors(canvasCtx, landmarks, Facemesh.FACEMESH_LEFT_EYE, {color: '#30FF30'});
+      drawConnectors(canvasCtx, landmarks, Facemesh.FACEMESH_LEFT_EYEBROW, {color: '#30FF30'});
+      drawConnectors(canvasCtx, landmarks, Facemesh.FACEMESH_LEFT_IRIS, {color: '#30FF30'});
+      drawConnectors(canvasCtx, landmarks, Facemesh.FACEMESH_FACE_OVAL, {color: '#E0E0E0'});
+      drawConnectors(canvasCtx, landmarks, Facemesh.FACEMESH_LIPS, {color: '#E0E0E0'});
+    }
+  }
+}
+
 function App() {
   const webcamRef = useRef(null);
   const canvasRef = useRef(null);
@@ -22,20 +39,9 @@ function App() {
     canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
     canvasCtx.drawImage(
         results.image, 0, 0, canvasElement.width, canvasElement.height);
-    if (results.multiFaceLandmarks) {
-      for (const landmarks of results.multiFaceLandmarks) {
-        drawConnectors(canvasCtx, landmarks, Facemesh.FACEMESH_TESSELATION,
-                       {color: '#C0C0C070', lineWidth: 1});
-        drawConnectors(canvasCtx, landmarks, Facemesh.FACEMESH_RIGHT_EYE, {color: '#FF3030'});
-        drawConnectors(canvasCtx, landmarks, Facemesh.FACEMESH_RIGHT_EYEBROW, {color: '#FF3030'});
-        drawConnectors(canvasCtx, landmarks, Facemesh.FACEMESH_RIGHT_IRIS, {color: '#FF3030'});
-        drawConnectors(canvasCtx, landmarks, Facemesh.FACEMESH_LEFT_EYE, {color: '#30FF30'});
-        drawConnectors(canvasCtx, landmarks, Facemesh.FACEMESH_LEFT_EYEBROW, {color: '#30FF30'});
-        drawConnectors(canvasCtx, landmarks, Facemesh.FACEMESH_LEFT_IRIS, {color: '#30FF30'});
-        drawConnectors(canvasCtx, landmarks, Facemesh.FACEMESH_FACE_OVAL, {color: '#E0E0E0'});
-        drawConnectors(canvasCtx, landmarks, Facemesh.FACEMESH_LIPS, {color: '#E0E0E0'});
-      }
-    }
+    faceDraw(results, canvasCtx, drawConnectors);
+
+
     canvasCtx.restore();
   }
 
@@ -69,6 +75,7 @@ function App() {
       Hello hands pose detection!
       <Webcam
       ref={webcamRef}
+      videoConstraints={{facingMode: "user"}}
       style={{
         position: 'absolute',
         marginRight:'auto',
