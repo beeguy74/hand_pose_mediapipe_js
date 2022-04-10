@@ -11,6 +11,7 @@ function App() {
   const canvasRef = useRef(null);
   var camera = null;
   const drawConnectors = window.drawConnectors
+
   function onResults(results){
     //not working properly without setting W, H of canvas
     canvasRef.current.width = webcamRef.current.video.videoWidth;
