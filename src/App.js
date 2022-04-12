@@ -5,6 +5,8 @@ import * as Handsmesh from '@mediapipe/hands'
 import * as Cam from '@mediapipe/camera_utils'
 import Webcam from 'react-webcam'
 import {useRef, useEffect } from 'react'
+import * as THREE from 'three'
+import threeDraw from './threeDraw';
 
 function handDraw(results, canvasCtx, drawConnectors, drawLandmarks) {
   if (results.multiHandLandmarks) {
@@ -14,22 +16,8 @@ function handDraw(results, canvasCtx, drawConnectors, drawLandmarks) {
       drawLandmarks(canvasCtx, landmarks, {color: '#FF0000', lineWidth: 2});
     }
   }
-
-  // if (results.multiFaceLandmarks) {
-  //   for (const landmarks of results.multiFaceLandmarks) {
-  //     drawConnectors(canvasCtx, landmarks, Handsmesh.FACEMESH_TESSELATION,
-  //                     {color: '#C0C0C070', lineWidth: 1});
-  //     drawConnectors(canvasCtx, landmarks, Handsmesh.FACEMESH_RIGHT_EYE, {color: '#FF3030'});
-  //     drawConnectors(canvasCtx, landmarks, Handsmesh.FACEMESH_RIGHT_EYEBROW, {color: '#FF3030'});
-  //     drawConnectors(canvasCtx, landmarks, Handsmesh.FACEMESH_RIGHT_IRIS, {color: '#FF3030'});
-  //     drawConnectors(canvasCtx, landmarks, Handsmesh.FACEMESH_LEFT_EYE, {color: '#30FF30'});
-  //     drawConnectors(canvasCtx, landmarks, Handsmesh.FACEMESH_LEFT_EYEBROW, {color: '#30FF30'});
-  //     drawConnectors(canvasCtx, landmarks, Handsmesh.FACEMESH_LEFT_IRIS, {color: '#30FF30'});
-  //     drawConnectors(canvasCtx, landmarks, Handsmesh.FACEMESH_FACE_OVAL, {color: '#E0E0E0'});
-  //     drawConnectors(canvasCtx, landmarks, Handsmesh.FACEMESH_LIPS, {color: '#E0E0E0'});
-  //   }
-  // }
 }
+
 
 function App() {
   const webcamRef = useRef(null);
@@ -44,15 +32,14 @@ function App() {
     canvasRef.current.height= webcamRef.current.video.videoHeight;
 
     const canvasElement = canvasRef.current;
-    const canvasCtx = canvasElement.getContext('2d');
-    canvasCtx.save();
-    canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
-    canvasCtx.drawImage(
-        results.image, 0, 0, canvasElement.width, canvasElement.height);
-    handDraw(results, canvasCtx, drawConnectors, drawLandmarks);
-
-
-    canvasCtx.restore();
+    // const canvasCtx = canvasElement.getContext('2d');
+    // canvasCtx.save();
+    // canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+    // canvasCtx.drawImage(
+        // results.image, 0, 0, canvasElement.width, canvasElement.height);
+    // handDraw(results, canvasCtx, drawConnectors, drawLandmarks);
+    // canvasCtx.restore();
+    threeDraw(results, canvasElement, webcamRef.current.video);
   }
 
   useEffect(() => {
@@ -96,7 +83,8 @@ function App() {
         textAlign: "center",
         zIndex: 9,
         width:640,
-        height:480
+        height:480,
+        visibility: 'hidden'
       }}/>
       <canvas 
       ref={canvasRef}
@@ -109,7 +97,7 @@ function App() {
         textAlign: "center",
         zIndex: 9,
         width:640,
-        height:480
+        height:480,
       }}/>
     </div>
   );
