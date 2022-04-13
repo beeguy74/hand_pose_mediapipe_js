@@ -25,7 +25,7 @@ function threeDraw(results, canvasElement, video){
   scene.background = texture;
   
   // Create a camera
-  const fov = 35; // AKA Field of View
+  const fov = 45; // AKA Field of View
   // const aspect = container.clientWidth / container.clientHeight;
   const aspect = canvasElement.width / canvasElement.height;
   const near = 0.1; // the near clipping plane
@@ -35,10 +35,10 @@ function threeDraw(results, canvasElement, video){
   
   // every object is initially created at ( 0, 0, 0 )
   // move the camera back so we can view the scene
-  camera.position.set(0, 0, 10);
+  camera.position.set(0, 0, 100);
   
   // create a geometry
-  const geometry = new BoxBufferGeometry(2, 3, 2);
+  const geometry = new BoxBufferGeometry(1, 1, 1);
   
   // create a default (white) Basic material
   const material = new MeshBasicMaterial({color: 'black'});
@@ -48,6 +48,20 @@ function threeDraw(results, canvasElement, video){
   
   // add the mesh to the scene
   scene.add(cube);
+  // if (results.multiHandLandmarks.length > 0) {
+  if (results.multiHandLandmarks.length > 0) {
+    const hand = results.multiHandLandmarks[0];
+
+    // for (const landmarks of results.multiHandLandmarks) {
+    //   console.log("new x point of wrist!!!");
+    //   console.log(landmarks[0].x);
+    // }
+    const wrist = hand[0];
+    console.log("MEDIAPIPE X", wrist.x);
+    cube.position.x = (wrist.x - 0.5) * 100;
+    cube.position.y = (wrist.y - 0.5) * -100;
+    cube.position.z = wrist.z;
+  }
   
   // create the renderer
   // const renderer = new WebGLRenderer();
