@@ -1,37 +1,39 @@
-import logo from './logo.svg';
+// import logo from './logo.svg';
 import './App.css';
 import {Hands} from '@mediapipe/hands'
 import * as Handsmesh from '@mediapipe/hands'
 import * as Cam from '@mediapipe/camera_utils'
 import Webcam from 'react-webcam'
 import {useRef, useEffect } from 'react'
-import * as THREE from 'three'
-import threeDraw from './threeDraw';
+// import * as THREE from 'three'
+// import threeDraw from './threeWorld';
+import threeWorld from './threeWorld';
 
-function handDraw(results, canvasCtx, drawConnectors, drawLandmarks) {
-  if (results.multiHandLandmarks) {
-    for (const landmarks of results.multiHandLandmarks) {
-      drawConnectors(canvasCtx, landmarks, Handsmesh.HAND_CONNECTIONS,
-                     {color: '#00FF00', lineWidth: 5});
-      drawLandmarks(canvasCtx, landmarks, {color: '#FF0000', lineWidth: 2});
-    }
-  }
-}
+// function handDraw(results, canvasCtx, drawConnectors, drawLandmarks) {
+//   if (results.multiHandLandmarks) {
+//     for (const landmarks of results.multiHandLandmarks) {
+//       drawConnectors(canvasCtx, landmarks, Handsmesh.HAND_CONNECTIONS,
+//                      {color: '#00FF00', lineWidth: 5});
+//       drawLandmarks(canvasCtx, landmarks, {color: '#FF0000', lineWidth: 2});
+//     }
+//   }
+// }
 
 
 function App() {
   const webcamRef = useRef(null);
   const canvasRef = useRef(null);
+  const worldRef = useRef(new threeWorld())
   var camera = null;
-  const drawConnectors = window.drawConnectors;
-  const drawLandmarks = window.drawLandmarks;
+  // const drawConnectors = window.drawConnectors;
+  // const drawLandmarks = window.drawLandmarks;
 
   function onResults(results){
     //not working properly without setting W, H of canvas
     canvasRef.current.width = webcamRef.current.video.videoWidth;
     canvasRef.current.height= webcamRef.current.video.videoHeight;
 
-    const canvasElement = canvasRef.current;
+    // const canvasElement = canvasRef.current;
     // const canvasCtx = canvasElement.getContext('2d');
     // canvasCtx.save();
     // canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
@@ -39,10 +41,11 @@ function App() {
         // results.image, 0, 0, canvasElement.width, canvasElement.height);
     // handDraw(results, canvasCtx, drawConnectors, drawLandmarks);
     // canvasCtx.restore();
-    threeDraw(results, canvasElement, webcamRef.current.video);
+    // threeDraw(results, canvasElement, webcamRef.current.video);
+    worldRef.current.update(results, canvasRef.current);
   }
 
-  useEffect(() => {
+  useEffect(async () => {
     const handsMesh = new Hands({
       locateFile: (file) => {
         return `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`;
@@ -54,6 +57,7 @@ function App() {
       minDetectionConfidence: 0.5,
       minTrackingConfidence: 0.5
     })
+    await worldRef.current.init(canvasRef.current, webcamRef.current.video);
     
     handsMesh.onResults(onResults);
 
