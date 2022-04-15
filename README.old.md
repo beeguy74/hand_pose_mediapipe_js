@@ -1,1 +1,0 @@
-# hand_pose_mediapipe_js

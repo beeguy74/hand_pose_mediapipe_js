@@ -53,6 +53,8 @@ class threeWorld{
     this.modelWatch = this.setupModel(loadedData);
     // add the model to the this.scene. setTimeout for load textures properly
     setTimeout(() => { this.scene.add(this.modelWatch);}, 4000);
+    this.modelWatch.scale.set(3, 3, 3);
+    this.modelWatch.rotation.set((3.14 / 2), 0, 0);
 
     // create the renderer
     // next, set the this.renderer to the same size as our container element
@@ -77,7 +79,7 @@ class threeWorld{
       // console.log("MEDIAPIPE X", wrist.x);
       this.modelWatch.position.x = (wrist.x - 0.5);
       this.modelWatch.position.y = (wrist.y - 0.5) * -1;
-      this.modelWatch.position.z = wrist.z;
+      this.modelWatch.position.z = (wrist.z - 0.5) * -1;
     }
     this.renderer.setSize(canvasElement.width, canvasElement.height);
     this.renderer.render(this.scene, this.camera);

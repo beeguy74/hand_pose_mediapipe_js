@@ -1,3 +1,13 @@
+# Fitting room of wristwatches. Hand_pose_mediapipe_js
+
+The model of the wristwatch is displayed on the wrist of the consumer. 
+Track thw hand through your webcam using the mediapipe library. 
+Display your wristwatch using the Three.js library. 
+
+Now the tracking of the point on the wrist is implemented, and the binding of the 3D model to the point. 
+
+I have to figure out how to change the orientation of the model in space.
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
