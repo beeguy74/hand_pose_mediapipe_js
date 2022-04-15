@@ -5,8 +5,6 @@ import * as Handsmesh from '@mediapipe/hands'
 import * as Cam from '@mediapipe/camera_utils'
 import Webcam from 'react-webcam'
 import {useRef, useEffect } from 'react'
-// import * as THREE from 'three'
-// import threeDraw from './threeWorld';
 import threeWorld from './threeWorld';
 
 // function handDraw(results, canvasCtx, drawConnectors, drawLandmarks) {
@@ -41,7 +39,6 @@ function App() {
         // results.image, 0, 0, canvasElement.width, canvasElement.height);
     // handDraw(results, canvasCtx, drawConnectors, drawLandmarks);
     // canvasCtx.restore();
-    // threeDraw(results, canvasElement, webcamRef.current.video);
     worldRef.current.update(results, canvasRef.current);
   }
 
